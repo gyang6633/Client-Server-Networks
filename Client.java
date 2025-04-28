@@ -5,10 +5,10 @@ class Client {
     public static void main(String argv[]) throws Exception
     {
         String name;   
-        int operand1; 
+        /*int operand1; 
         int operand2;
         char operator;
-        String result;  
+        String result; */ 
         System.out.println("CLIENT IS RUNNING!" );
 
         Socket clientSocket = new Socket("127.0.0.1", 6789);
@@ -35,7 +35,7 @@ class Client {
           System.out.println("FROM SERVER: " + joinResponse); 
 
           while(!exit) {
-              System.out.print("Enter operator (+, -, *, /, %) or type 'exit' to quit: ");
+              System.out.print("Enter math expression (+, -, *, /, %) or type 'exit' to quit: ");
               String operatorFull = inFromUser.readLine(); 
 
               if (operatorFull.equalsIgnoreCase("exit")) {
@@ -46,15 +46,16 @@ class Client {
                 clientSocket.close();
               }
               else {
-                operator = operatorFull.charAt(0); 
+                /*operator = operatorFull.charAt(0); 
                 System.out.print("Enter the first operand: "); 
                 operand1 = Integer.parseInt(inFromUser.readLine());
                 System.out.print("Enter the second operand: "); 
-                operand2 = Integer.parseInt(inFromUser.readLine());
-                outToServer.writeBytes("CALC|" + name + "|" + operator + "|" + operand1 + "|" + operand2 + "\n");
+                operand2 = Integer.parseInt(inFromUser.readLine());*/
+                outToServer.writeBytes("CALC|" + name + "|" + operatorFull + "\n");
+
     
                 // wait for response from server with the result
-                result = inFromServer.readLine();
+                String result = inFromServer.readLine();
                 System.out.println("FROM SERVER: " + result);
               }
           }         

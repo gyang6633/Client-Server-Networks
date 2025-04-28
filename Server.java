@@ -62,48 +62,19 @@ class ClientHandler implements Runnable {
               System.out.print(message);
               outToClient.writeBytes(message);  
               break;
-            case "CALC": 
-              int result = 0;
-              int operand1 = Integer.parseInt(split[3]);
-              int operand2 = Integer.parseInt(split[4]); 
-              String resultToClient = ""; 
-              switch(split[2]) {
-                case "+": 
-                  result = operand1 + operand2; 
-                  resultToClient =  operand1 + " + " + operand2 + " = " + result; 
-                  System.out.println("Client " + split[1] + " performed: " + operand1 + " + " + operand2 + " = " + result); 
-                  break; 
-                case "-": 
-                  result = operand1 - operand2; 
-                  resultToClient =  operand1 + " - " + operand2 + " = " + result; 
-                  System.out.println("Client " + split[1] + " performed: " + operand1 + " - " + operand2 + " = " + result); 
-                  break; 
-                case "*": 
-                  result = operand1 * operand2; 
-                  resultToClient =  operand1 + " * " + operand2 + " = " + result; 
-                  System.out.println("Client " + split[1] + " performed: " + operand1 + " * " + operand2 + " = " + result); 
-                  break; 
-                case "/": 
-                  if (operand2 != 0) {
-                    result = operand1 / operand2; 
-                  }
-                  else {
-                    result = -1; 
-                    System.out.println("Division by 0 - error!"); 
-                  }
-                  resultToClient =  operand1 + " / " + operand2 + " = " + result; 
-                  System.out.println("Client " + split[1] + " performed: " + operand1 + " / " + operand2 + " = " + result); 
-                  break; 
-                case "%": 
-                  result = operand1 % operand2; 
-                  resultToClient =  operand1 + " % " + operand2 + " = " + result; 
-                  System.out.println("Client " + split[1] + " performed: " + operand1 + " % " + operand2 + " = " + result); 
-                  break;
-                default: 
-                  break;  
+              case "CALC":
+              String expression = split[2]; // The full expression string
+              try {
+                  int evalResult = calculateExpression(expression);
+                  String resultToClient = expression + " = " + evalResult;
+                  System.out.println("Client " + split[1] + " performed: " + resultToClient);
+                  outToClient.writeBytes(resultToClient + "\n");
+              } catch (Exception e) {
+                  outToClient.writeBytes("Error evaluating expression: " + e.getMessage() + "\n");
               }
-              outToClient.writeBytes(resultToClient + "\n");
-              break; 
+              break;
+            
+
             case "EXIT":
               LocalDateTime disconnectTime = LocalDateTime.now(); 
               Duration duration = Duration.between(connectTime, disconnectTime);
@@ -120,5 +91,36 @@ class ClientHandler implements Runnable {
       System.err.println("Client exception: " + e.getMessage()); 
     }
   }
+  private int calculateExpression(String expression) throws Exception {
+    String[] tokens = expression.trim().split(" ");
+    //if (tokens.length < 3) throw new Exception("Invalid expression");
+  
+    int result = Integer.parseInt(tokens[0]);
+  
+    for (int i = 1; i < tokens.length; i += 2) {
+        String operand = tokens[i];
+        int nextOperand = Integer.parseInt(tokens[i + 1]);
+  
+        switch (operand) {
+            case "+": result += nextOperand; 
+            break;
+            case "-": result -= nextOperand;
+            break;
+            case "*": result *= nextOperand; 
+            break;
+            case "/": 
+                if (nextOperand == 0);//can't divide by zero
+                result /= nextOperand; 
+                break;
+            case "%": result %= nextOperand; 
+            break;
+            default: throw new Exception("Unknown operator: " + operand);
+        }
+    }
+  
+    return result;
+  }
+  
+  
 }
 
