@@ -1,25 +1,23 @@
 import java.io.*;
 import java.net.*;
+
+
 class Client {
 
     public static void main(String argv[]) throws Exception
     {
         String name;   
-        /*int operand1; 
-        int operand2;
-        char operator;
-        String result; */ 
         System.out.println("CLIENT IS RUNNING!" );
-
+        
         Socket clientSocket = new Socket("127.0.0.1", 6789);
-
+         //read input from the user
         BufferedReader inFromUser =
           new BufferedReader(new InputStreamReader(System.in));
-
+        //get response from server
         BufferedReader inFromServer =
                 new BufferedReader(new
                 InputStreamReader(clientSocket.getInputStream()));
-
+        //Send request to server
         DataOutputStream outToServer =
           new DataOutputStream(clientSocket.getOutputStream());
         
@@ -33,7 +31,7 @@ class Client {
           outToServer.writeBytes("JOIN|" + name + "\n"); 
           String joinResponse = inFromServer.readLine();
           System.out.println("FROM SERVER: " + joinResponse); 
-
+        //prompt user to input math expression
           while(!exit) {
               System.out.print("Enter math expression (i.e. 1 + 2 - 3) or type 'exit' to quit: ");
               String operatorFull = inFromUser.readLine(); 
@@ -46,11 +44,6 @@ class Client {
                 clientSocket.close();
               }
               else {
-                /*operator = operatorFull.charAt(0); 
-                System.out.print("Enter the first operand: "); 
-                operand1 = Integer.parseInt(inFromUser.readLine());
-                System.out.print("Enter the second operand: "); 
-                operand2 = Integer.parseInt(inFromUser.readLine());*/
                 outToServer.writeBytes("CALC|" + name + "|" + operatorFull + "\n");
 
     

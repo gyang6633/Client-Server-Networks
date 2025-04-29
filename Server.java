@@ -19,20 +19,22 @@ class Server {
 
   public static void main(String argv[]) throws Exception
     {
+      //create server socket
       ServerSocket welcomeSocket = new ServerSocket(6789);
       System.out.println("SERVER UP AND RUNNING!");
 
+      //accept incoming client connections
       while(true) {
         Socket connectionSocket = welcomeSocket.accept();
         System.out.println("New client connected: " + connectionSocket.getInetAddress()); 
-            
+        //create thread for each new client    
         ClientHandler handler = new ClientHandler(connectionSocket); 
         Thread thread = new Thread(handler); 
         thread.start(); 
         }
     }
 }
-
+//handles communication for each individual client
 class ClientHandler implements Runnable {
   private Socket clientSocket; 
   private LocalDateTime connectTime; 
@@ -74,7 +76,7 @@ class ClientHandler implements Runnable {
               }
               break;
             
-
+            //exit application and log connection details
             case "EXIT":
               LocalDateTime disconnectTime = LocalDateTime.now(); 
               Duration duration = Duration.between(connectTime, disconnectTime);
@@ -91,12 +93,12 @@ class ClientHandler implements Runnable {
       System.err.println("Client exception: " + e.getMessage()); 
     }
   }
+  //method to read and calculate expression
   private int calculateExpression(String expression) throws Exception {
-    String[] tokens = expression.trim().split(" ");
-    //if (tokens.length < 3) throw new Exception("Invalid expression");
-  
+    String[] tokens = expression.trim().split(" ");//split the expression in operands and operators
     int result = Integer.parseInt(tokens[0]);
   
+  //loop through the tokens perform operation
     for (int i = 1; i < tokens.length; i += 2) {
         String operand = tokens[i];
         int nextOperand = Integer.parseInt(tokens[i + 1]);
@@ -118,7 +120,7 @@ class ClientHandler implements Runnable {
         }
     }
   
-    return result;
+    return result; //result of calculation
   }
   
   
