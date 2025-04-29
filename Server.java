@@ -5,7 +5,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.Duration;
 /*
 1. The server keeps track of all users – track who, when, how long the user attached to the
-server.
+server
 2. The server should wait for the client’s request. Upon attachment, the server should log
 the details about the client.
 3. The server can have connections simultaneously with multiple clients.

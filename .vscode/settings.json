@@ -6,5 +6,6 @@
     "java.compile.args": [
         "--enable-preview"
     ],
-    "java.debug.settings.vmArgs": "--enable-preview"
+    "java.debug.settings.vmArgs": "--enable-preview",
+    "makefile.configureOnOpen": false
 }

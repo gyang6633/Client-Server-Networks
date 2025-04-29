@@ -35,7 +35,7 @@ class Client {
           System.out.println("FROM SERVER: " + joinResponse); 
 
           while(!exit) {
-              System.out.print("Enter math expression (+, -, *, /, %) or type 'exit' to quit: ");
+              System.out.print("Enter math expression (i.e. 1 + 2 - 3) or type 'exit' to quit: ");
               String operatorFull = inFromUser.readLine(); 
 
               if (operatorFull.equalsIgnoreCase("exit")) {
